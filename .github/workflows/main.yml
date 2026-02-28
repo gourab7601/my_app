@@ -5,17 +5,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Build with Buildozer
-        # আমরা এখন সরাসরি অফিশিয়াল মেথড ব্যবহার করছি
-        uses: FarasYashar/buildozer-action@master
+        # এটা সবথেকে নির্ভরযোগ্য বিল্ডার অ্যাকশন
+        uses: jreleaser/buildozer-action@v0
         with:
           command: android debug
-          buildozer_version: stable
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        # লেটেস্ট v4 ভার্সন ব্যবহার করছি
+        uses: actions/upload-artifact@v4
         with:
           name: my-app-apk
           path: bin/*.apk
