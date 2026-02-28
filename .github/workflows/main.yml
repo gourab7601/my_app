@@ -3,18 +3,28 @@ on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # আমরা একদম স্টেবল ভার্সন ব্যবহার করছি
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build with Buildozer
-        # এটা সবথেকে নির্ভরযোগ্য বিল্ডার অ্যাকশন
-        uses: jreleaser/buildozer-action@v0
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          command: android debug
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          pip3 install --user --upgrade Cython==0.29.33 buildozer
+
+      - name: Build with Buildozer
+        run: |
+          export PATH=$PATH:$HOME/.local/bin
+          # সরাসরি কমান্ড দিয়ে বিল্ড শুরু
+          yes | buildozer android debug
 
       - name: Upload APK
-        # লেটেস্ট v4 ভার্সন ব্যবহার করছি
         uses: actions/upload-artifact@v4
         with:
           name: my-app-apk
