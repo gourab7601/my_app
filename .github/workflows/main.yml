@@ -3,7 +3,7 @@ on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-22.04  # আমরা একদম স্টেবল ভার্সন ব্যবহার করছি
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
 
@@ -12,17 +12,25 @@ jobs:
         with:
           python-version: '3.11'
 
+      # এই ধাপটি মাস্ট, জাভা ঠিক না থাকলে গ্রেডল ফেল করবেই
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          sudo apt-get install -y git zip unzip python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
           pip3 install --user --upgrade Cython==0.29.33 buildozer
 
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          # সরাসরি কমান্ড দিয়ে বিল্ড শুরু
-          yes | buildozer android debug
+          # 'yes' কমান্ডে ব্রোকেন পাইপ এড়াতে এইভাবে রান করো
+          buildozer android debug || buildozer android debug
+        # যদি প্রথমবার আটকে যায়, দ্বিতীয়বার এটা ক্যাশ থেকে অটো শেষ করবে
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
